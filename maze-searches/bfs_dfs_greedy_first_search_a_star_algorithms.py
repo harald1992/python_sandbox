@@ -70,6 +70,7 @@ _algorithm: Algorithm = Algorithm.A_STAR
 _maze: List[Cell]
 _amount_checked = 0
 _goal: Node
+_is_greedy = True
 
 
 def _is_allowed_path(current: Node):
@@ -82,15 +83,18 @@ def _is_allowed_path(current: Node):
         return False
 
 
-def search_maze(maze: List[Cell], current: Vector2, goal: Vector2, algorithm=Algorithm.BFS):
+def search_maze(maze: List[Cell], current: Vector2, goal: Vector2, algorithm=Algorithm.BFS, is_greedy=True):
     global _maze
     global _algorithm
     global _frontier
     global _goal
+    global _is_greedy
 
     _maze = maze
     _algorithm = algorithm
     _goal = goal
+    _is_greedy = is_greedy
+
     if _algorithm == Algorithm.BFS:
         _frontier = QueueFrontier()
     elif _algorithm == Algorithm.A_STAR:
@@ -116,7 +120,9 @@ def _search(current: Node, goal: Node):
         node for node in [Node(current.x + direction[0], current.y + direction[1]) for direction in DIRECTIONS]
         if _is_allowed_path(node)
     ]
-    allowed_new_nodes.sort(key=lambda n: _get_heuristic_length(n, goal), reverse=True)
+
+    if _is_greedy:
+        allowed_new_nodes.sort(key=lambda n: _get_heuristic_length(n, goal), reverse=True)
 
     for node in allowed_new_nodes:
         node.parent = current
@@ -129,7 +135,7 @@ def _search(current: Node, goal: Node):
 
 
 def _get_heuristic_length(node: Node, goal: Node):
-    return abs(goal.x - node.x) + abs(goal.y - node.y)
+    return abs(goal.x - node.x) + abs(goal.y - node.y) # Manhattan distance
 
 
 def draw_node(node: Node, color: tuple):

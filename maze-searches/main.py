@@ -49,7 +49,7 @@ def draw_start_goal():
 def search():
     # depth_first_search(mazeResult.maze, Node(mazeResult.start_coordinate.x, mazeResult.start_coordinate.y),
     #                    Node(mazeResult.last_coordinate.x, mazeResult.last_coordinate.y))
-    search_maze(mazeResult.maze, mazeResult.start_coordinate, mazeResult.goal_coordinate, Algorithm.A_STAR)
+    search_maze(mazeResult.maze, mazeResult.start_coordinate, mazeResult.goal_coordinate, Algorithm.A_STAR, True)
 
 
 while True:
