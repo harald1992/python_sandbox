@@ -1,10 +1,11 @@
 from game import Game
+import curses
 
 
-def main():
+def main(stdscr: curses.window):
     game = Game()
-    game.start_game()
+    game.start_game(stdscr)
 
 
 if __name__ == "__main__":
-    main()
+    curses.wrapper(main)

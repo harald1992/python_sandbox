@@ -1,7 +1,8 @@
 from enum import Enum
 import time
 import random
-import os
+import curses
+from decision_tree_logic import create_actions_tree
 
 
 class Winner(Enum):
@@ -14,16 +15,22 @@ class Game:
     def __init__(self):
         self.board = [[' ' for _ in range(3)] for _ in range(3)]
         self.is_max_player_turn = True
+        self.cursor_x = 0
+        self.cursor_y = 0
 
-    def print_board(self):
-        os.system('clear')
+    def print_board(self, stdscr: curses.window):
+        stdscr.clear()
         for y in range(3):
-            print(' ---' * 3)
-            print('|', end='')
+            stdscr.addstr(y * 2, 0, ' ---' * 3)
+            stdscr.addstr(y * 2 + 1, 0, '|')
             for x in range(3):
-                print(f' {self.board[y][x]} |', end='')
-            print()
-        print(' ---' * 3)
+                if y == self.cursor_y and x == self.cursor_x:
+                    stdscr.addstr(y * 2 + 1, x * 4 + 1, f'[{self.board[y][x]}]')
+                else:
+                    stdscr.addstr(y * 2 + 1, x * 4 + 1, f' {self.board[y][x]} ')
+                stdscr.addstr(y * 2 + 1, x * 4 + 4, '|')
+            stdscr.addstr(y * 2 + 2, 0, ' ---' * 3)
+        stdscr.refresh()
 
     def get_state(self) -> list[list[str]]:
         return self.board
@@ -76,41 +83,62 @@ class Game:
 
         return winner
 
-    def get_possible_actions(self) -> list[list[int]]:
-        possible_actions = []
-        for y in range(3):
-            for x in range(3):
-                if self.board[y][x] == ' ':
-                    possible_actions.append([x, y])
-        return possible_actions
-
     def is_max_players_turn(self) -> bool:
         return self.is_max_player_turn
 
-    def perform_turn_min(self):
-        possible_actions = self.get_possible_actions()
+    # def perform_turn_min(self):
+        # possible_actions = self.get_possible_actions()
+        #
+        # action = random.choice(possible_actions)
+        # self.board[action[1]][action[0]] = 'o'
+        # create_actions_tree(self.board)
 
-        action = random.choice(possible_actions)
-        self.board[action[1]][action[0]] = 'o'
-
-    def start_game(self):
+    def start_game(self, stdscr: curses.window):
+        curses.curs_set(0)
+        stdscr.keypad(True)
+        stdscr.clear()
+        stdscr.refresh()
         print("Starting game")
 
         while True:
-            # PLAYER (MAX) TURN
-            self.print_board()
-            choice = input("Enter your choice (x,y): ")
-            x, y = map(int, choice.split(','))
-            self.board[y][x] = 'x'
-            self.print_board()
+            self.player_turn(stdscr)
+            self.print_board(stdscr)
+
             if self.get_terminal() == Winner.CROSS:
-                print("Cross (Max) wins!!")
+                stdscr.addstr(7, 0, "Cross (Max) wins!!")
+                stdscr.refresh()
+                stdscr.getch()
                 break
 
             # AI (Min) turn
-            time.sleep(1.5)
-            self.perform_turn_min()
-            self.print_board()
-            if self.get_terminal() == Winner.CIRCLE:
-                print("Circle (Min) wins!!")
-                break
+            # time.sleep(2.5)
+            # self.perform_turn_min()
+            create_actions_tree(self.board, stdscr)
+            # self.print_board(stdscr)
+            # if self.get_terminal() == Winner.CIRCLE:
+            #     stdscr.addstr(7, 0, "Circle (Min) wins!!")
+            #     stdscr.refresh()
+            #     stdscr.getch()
+            #     break
+
+    def player_turn(self, stdscr: curses.window):
+        while True:
+            self.print_board(stdscr)
+
+            key = stdscr.getch()
+            stdscr.addstr(7, 0, str(key))
+
+            if key == curses.KEY_UP and self.cursor_y > 0:
+                self.cursor_y -= 1
+            elif key == curses.KEY_DOWN and self.cursor_y < 2:
+                self.cursor_y += 1
+            elif key == curses.KEY_LEFT and self.cursor_x > 0:
+                self.cursor_x -= 1
+            elif key == curses.KEY_RIGHT and self.cursor_x < 2:
+                self.cursor_x += 1
+            elif key == ord(' '):
+                if self.board[self.cursor_y][self.cursor_x] == ' ':
+                    self.board[self.cursor_y][self.cursor_x] = 'x'
+                    break
+
+
