@@ -5,9 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c218751a-6899-445d-b3ae-0169627a49ad" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../tic-tac-toe/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tic-tac-toe/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tic-tac-toe/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tic-tac-toe/.idea/ruff.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tic-tac-toe/.idea/sonarlint.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tic-tac-toe/.idea/tic-tac-toe_minimax.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tic-tac-toe/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tic-tac-toe/game.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../tic-tac-toe/test_tic_tac_toe.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bfs_dfs_greedy_first_search_a_star_algorithms.py" beforeDir="false" afterPath="$PROJECT_DIR$/bfs_dfs_greedy_first_search_a_star_algorithms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +53,7 @@
   "keyToString": {
     "Python.maze-searches.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/haraldhiemstra/Programming/python_sandbox/maze-searches",
@@ -109,7 +117,7 @@
       <updated>1735755640324</updated>
       <workItem from="1735755641403" duration="34000" />
       <workItem from="1735755712957" duration="2928000" />
-      <workItem from="1735997111442" duration="35852000" />
+      <workItem from="1735997111442" duration="38283000" />
     </task>
     <servers />
   </component>
