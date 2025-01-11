@@ -1,0 +1,28 @@
+digraph {
+	size="1000,1000!"
+	"xxo
+ xo
+xo " [label="xxo
+ xo
+xo "]
+	"xxo
+oxo
+xo " [label="xxo
+oxo
+xo "]
+	"xxo
+ xo
+xo " -> "xxo
+oxo
+xo "
+	"xxo
+oxo
+xox" [label="xxo
+oxo
+xox"]
+	"xxo
+oxo
+xo " -> "xxo
+oxo
+xox"
+}
