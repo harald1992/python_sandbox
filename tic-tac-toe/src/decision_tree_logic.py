@@ -75,80 +75,51 @@ def create_decision_tree(initial_node: Node) -> Action:
     #         _stack.extend(node.children)
 
 
-def get_children(node: Node, is_maximizing: bool) -> list[Node]:
-    children = []
+
+
+
+def _minimax(node: Node) -> None:
+    global _terminal_nodes
+    global _method_count
+    _method_count += 1
+
+    if node.iteration > 22 or is_terminal(node.board_state):
+        _terminal_nodes.append(node)
+        return
+
+    # for each action determine the best one
+    best_nodes: list[Node] = []
+    best_score = -math.inf if not node.action.is_min_player else math.inf
+
     for action in get_possible_actions(node):
-        new_board = [row[:] for row in node.board_state]
-        new_board[action.y][action.x] = 'x' if is_maximizing else 'o'
-        child_node = Node(new_board, action, not is_maximizing, node)
-        node.children.append(child_node)
-        children.append(child_node)
-    return children
+        board_copy = [row[:] for row in node.board_state]  # Create a deep copy of the board
+        board_copy[action.y][action.x] = 'o' if action.is_min_player else 'x'
+        # score: float = get_score_from_board(board_copy)
+        score: float = get_score_simple(board_copy)
 
+        new_node = Node(board_copy, action, node.iteration + 1)
+        new_node.score = score
+        new_node.parent = node
 
-def _minimax(node, depth, is_maximizing):
-    if is_terminal(node.board_state):
-        winner = get_winner(node.board_state)
-        return winner.value
+        _minimax(new_node)  # Recursively call minimax on the new node
 
-    if is_maximizing:
-        max_eval = -float('inf')
-        for child in get_children(node, is_maximizing):
-            evaluation = _minimax(child, depth + 1, False)
-            max_eval = max(max_eval, evaluation)
-        node.score = max_eval
-        return max_eval
-    else:
-        min_eval = float('inf')
-        for child in get_children(node, is_maximizing):
-            evaluation = _minimax(child, depth + 1, True)
-            min_eval = min(min_eval, evaluation)
-        node.score = min_eval
-        return min_eval
+        if node.action.is_min_player:
+            best_score = min(best_score, new_node.score)
+        else:
+            best_score = max(best_score, new_node.score)
 
+        if new_node.score == best_score:
+            best_nodes = [new_node]
+        elif new_node.score == best_score:
+            best_nodes.append(new_node)
 
-# def _minimax(node: Node) -> None:
-#     global _terminal_nodes
-#     global _method_count
-#     _method_count += 1
-#
-#     if node.iteration > 22 or is_terminal(node.board_state):
-#         _terminal_nodes.append(node)
-#         return
-#
-#     # for each action determine the best one
-#     best_nodes: list[Node] = []
-#     best_score = -math.inf if not node.action.is_min_player else math.inf
-#
-#     for action in get_possible_actions(node):
-#         board_copy = [row[:] for row in node.board_state]  # Create a deep copy of the board
-#         board_copy[action.y][action.x] = 'o' if action.is_min_player else 'x'
-#         # score: float = get_score_from_board(board_copy)
-#         score: float = get_score_simple(board_copy)
-#
-#         new_node = Node(board_copy, action, node.iteration + 1)
-#         new_node.score = score
-#         new_node.parent = node
-#
-#         _minimax(new_node)  # Recursively call minimax on the new node
-#
-#         if node.action.is_min_player:
-#             best_score = min(best_score, new_node.score)
-#         else:
-#             best_score = max(best_score, new_node.score)
-#
-#         if new_node.score == best_score:
-#             best_nodes = [new_node]
-#         elif new_node.score == best_score:
-#             best_nodes.append(new_node)
-#
-#     node.score = best_score
-#     node.children.extend(best_nodes)
-#     _stack.extend(best_nodes)
+    node.score = best_score
+    node.children.extend(best_nodes)
+    _stack.extend(best_nodes)
 
 
 #
-#
+#   OLD ONE TO CALCULATE ALL POSSIBLE BOARD OPTIONS
 # def _minimax(node: Node):
 #     global _method_count
 #     _method_count += 1
